@@ -47,7 +47,7 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        return self.length / self.capacity
+        return float('{:.2f}'.format(self.length / self.capacity))
 
     def fnv1(self, key):
         """
@@ -112,12 +112,8 @@ class HashTable:
                     break
                 cur = cur.next
 
-        # if self.get_load_factor() >= 0.7:
-        #     print("load",self.get_load_factor())
-        #     self.resize(self.capacity*2)
-        # elif self.get_load_factor() <= 0.2:
-        #     self.resize(self.capacity//2)
-        #     print("load",self.get_load_factor())
+        if self.get_load_factor() >= 0.7:
+            self.resize(self.capacity*2)
 
 
             
@@ -138,6 +134,7 @@ class HashTable:
             if cur.key == key:
                 if cur.next == None and prev == None:
                     self.storage[self.hash_index(key)] = None
+                    self.length -=1
                     return
                 elif cur.next == None and prev != None:
                      prev.next = None
@@ -152,11 +149,12 @@ class HashTable:
                     return
             prev = cur
             cur = cur.next
-        self.length -=1
 
         if self.get_load_factor() <= 0.2:
-            self.resize(self.capacity//2)
-            print("load",self.get_load_factor())
+            new_capacity = self.capacity //2
+            if new_capacity < 8:
+                new_capacity = 8
+            self.resize(new_capacity)
 
 
 
@@ -186,7 +184,6 @@ class HashTable:
         """
         # Your code here
         old_capacity = self.capacity
-        print("oldCapacity", self.capacity)
         self.capacity = new_capacity
         oldStorage = self.storage
         self.storage = [None] * self.capacity
@@ -195,7 +192,7 @@ class HashTable:
             cur = oldStorage[i]
 
             while cur != None:
-                self.put(cur.key, cur.value)
+                self.storage[self.hash_index(cur.key)] = HashTableEntry(cur.key, cur.value)
                 cur = cur.next
         
 
