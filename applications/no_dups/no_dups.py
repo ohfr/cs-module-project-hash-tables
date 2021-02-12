@@ -1,5 +1,22 @@
 def no_dups(s):
     # Your code here
+    lookup = {}
+
+    if len(s) <=1:
+        return s
+
+    stringArr = s.split(' ')
+
+    newString = ''
+    for i in range(len(stringArr)):
+        if stringArr[i] not in lookup:
+            if i == 0:
+                newString += stringArr[i] 
+            else:
+                newString += ' ' + stringArr[i]
+            lookup[stringArr[i]] = 1
+    return newString
+
 
 
 
